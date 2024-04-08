@@ -505,7 +505,7 @@ export default function Transactions() {
         }}
         sx={{
           position: "sticky",
-          bottom: 70,
+          bottom: 90,
           "& .MuiFab-root": {
             width: "64px", 
             height: "64px", 

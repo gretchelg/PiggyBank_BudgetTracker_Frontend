@@ -373,7 +373,7 @@ export default function Budget() {
             }}
             sx={{
             position: "sticky",
-            bottom: 70,
+            bottom: 90,
             "& .MuiFab-root": {
                 width: "64px", // Increase the width
                 height: "64px", // Increase the height
@@ -393,15 +393,15 @@ export default function Budget() {
             }}
         >
             {actions.map((action) => (
-            <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                tooltipOpen
-                onClick={() => handleActionClick(action.route)}
-            />
+                <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    tooltipOpen
+                    onClick={() => handleActionClick(action.route)}
+                />
             ))}
-        </SpeedDial>
+            </SpeedDial>
         </Box>
     </Container>
     );
