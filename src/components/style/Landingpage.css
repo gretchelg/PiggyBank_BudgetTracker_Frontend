@@ -1,0 +1,48 @@
+.landingPage {
+    background: snow;
+}
+
+.cornerright {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.cornerleft {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.landingPage {
+    position: relative;
+}
+  
+.logo-title {
+    font-size: 35px;
+    margin: 0;
+    color: #453f78;
+}
+
+.logo-title span {
+    color: var(--red);
+}
+
+.btn-landingPage {
+    width: 120px;
+    height: 40px;
+    padding:0.5em;
+    border-radius: 5rem;
+    border: none;
+    background-color: var(--red);
+    color: white;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.btn-landingPage:hover{
+    background-color: white;
+    color: var(--red);
+    border: 1px solid  var(--red);
+    transition: all ease 0.3s;
+}
