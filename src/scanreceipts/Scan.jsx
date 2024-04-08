@@ -16,17 +16,17 @@ import { useNavigate } from "react-router-dom";
 import { CameraAltRounded } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const style = {
-position: "absolute",
-top: "40%",
-left: "50%",
-transform: "translate(-50%, -50%)",
-width: 400,
-bgcolor: "background.paper",
-border: "2px solid #000",
-boxShadow: 24,
-p: 4,
-};
+    const style = {
+        position: "absolute",
+        top: "40%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 400,
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        p: 4,
+    };
 
 export default function Scan() {
     const [trans, setTrans] = useState("");
@@ -162,9 +162,9 @@ export default function Scan() {
                     mt: 8,
                     transition: "all 0.3s ease",
                     "&:hover": { transform: "scale(1.1)" },
-                    mt: 8,
-                    transition: "all 0.3s ease",
-                    ":hover": { bgcolor: "#c80048", color: "white" },
+                    // mt: 8,
+                    // transition: "all 0.3s ease",
+                    // ":hover": { bgcolor: "#c80048", color: "white" },
                     borderRadius: "31px",
                     background: "#white",
                     width: "150px",
@@ -172,7 +172,7 @@ export default function Scan() {
                     color: "#c80048",
                     fontSize: "10px",
                     textDecoration: "none",
-                    "&:hover": { transform: "scale(1.1)" },
+                    // "&:hover": { transform: "scale(1.1)" },
                     }}
                 >
                     <Typography variant="h5"> Submit</Typography>
@@ -185,9 +185,9 @@ export default function Scan() {
                     mt: 8,
                     transition: "all 0.3s ease",
                     "&:hover": { transform: "scale(1.1)" },
-                    mt: 8,
-                    transition: "all 0.3s ease",
-                    ":hover": { bgcolor: "#c80048", color: "white" },
+                    // mt: 8,
+                    // transition: "all 0.3s ease",
+                    // ":hover": { bgcolor: "#c80048", color: "white" },
                     borderRadius: "31px",
                     background: "#white",
                     width: "150px",
@@ -195,7 +195,7 @@ export default function Scan() {
                     color: "#c80048",
                     fontSize: "10px",
                     textDecoration: "none",
-                    "&:hover": { transform: "scale(1.1)" },
+                    // "&:hover": { transform: "scale(1.1)" },
                     }}
                 >
                     <Typography variant="h5"> CLOSE</Typography>

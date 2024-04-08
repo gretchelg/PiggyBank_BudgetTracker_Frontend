@@ -15,6 +15,7 @@ import AddBudget from './components/AddBudget';
 import Budget from './components/Budget';
 import Report from './components/Report';
 import Scan from './scanreceipts/Scan';
+import Client from './plaid/Client';
 
 
 function App() {
@@ -38,9 +39,7 @@ function App() {
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/addbudget" element={<AddBudget />} />
                 <Route path="/scan" element={<Scan />} />
-                {/* <Route path="/link" element={<Client />} />
-                <Route path="/upload" element={<Upload />} />
-                <Route path="/camera" element={<CaptureImage />} /> */}
+                <Route path="/link" element={<Client />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
 

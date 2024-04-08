@@ -89,7 +89,7 @@ export default function NavBar() {
 
     return "";
     };
- 
+
     const currentPage = page();
     console.log("Current page:", currentPage);
     
