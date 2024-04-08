@@ -14,6 +14,7 @@ import AddExpense from './components/AddExpense';
 import AddBudget from './components/AddBudget';
 import Budget from './components/Budget';
 import Report from './components/Report';
+import Scan from './scanreceipts/Scan';
 
 
 function App() {
@@ -36,8 +37,8 @@ function App() {
                 <Route path="/addincome" element={<AddIncome />} />
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/addbudget" element={<AddBudget />} />
-                {/* <Route path="/link" element={<Client />} />
                 <Route path="/scan" element={<Scan />} />
+                {/* <Route path="/link" element={<Client />} />
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/camera" element={<CaptureImage />} /> */}
                 <Route path="*" element={<Navigate to="/" />} />
