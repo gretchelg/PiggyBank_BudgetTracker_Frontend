@@ -82,7 +82,7 @@ export default function DataContextProvider(props) {
                         }
                     };
 
-                    result[category_name].spent =+ Number(tran_amount);
+                    result[category_name].spent += Number(tran_amount);
                     result[category_name].transactions += 1;
                     
                     return result;
@@ -93,7 +93,7 @@ export default function DataContextProvider(props) {
                     if (groupedObjects[budget.category_name]) {
                         groupedObjects[budget.category_name].limit = 
                         Number(budget.limit_amount)
-                        console.log(groupedObjects[budget.category_name]);
+                        console.log("##categoryobject: ", groupedObjects[budget.category_name]);
                     }
                 });
 

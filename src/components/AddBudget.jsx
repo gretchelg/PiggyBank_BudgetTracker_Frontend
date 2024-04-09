@@ -164,19 +164,23 @@ export default function Addbudget() {
                                     Bills
                                 </MenuItem>
 
-                                <MenuItem value={"rent"}>
-                                    Rent
+                                <MenuItem value={"home"}>
+                                    Home
                                 </MenuItem>
 
-                                <MenuItem value={"medicine"}>
-                                    Medicine
+                                <MenuItem value={"transport"}>
+                                    Transport
                                 </MenuItem>
 
-                                <MenuItem value={"groceries"}>
-                                    Groceries
+                                <MenuItem value={"health"}>
+                                    Health
                                 </MenuItem>
 
-                                <MenuItem value={"eatingOut"}>
+                                <MenuItem value={"food"}>
+                                    Food
+                                </MenuItem>
+
+                                <MenuItem value={"eatingout"}>
                                     Eating Out
                                 </MenuItem>
 
