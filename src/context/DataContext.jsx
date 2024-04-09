@@ -9,7 +9,7 @@ export default function DataContextProvider(props) {
     const [budgetData, setBudgetData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [refresh, setRefresh] = useState(false);
-    const [timePeriod, setTimePeriod] = useState("");
+
     const [categoriesObj, setCategoriesObj] = useState({});
     const { token } = useContext(AuthContext);
     const { decodedToken } = useJwt(token);
@@ -21,7 +21,8 @@ export default function DataContextProvider(props) {
         const getData = async function () {
             try {
                 const res = await fetch(
-                    `http://localhost:8080/transaction/?timeperiod=all`,
+                    // `http://localhost:8080/transaction/?timeperiod=all`,
+                    `https://piggybank-api-jwhz.onrender.com/transaction/?timeperiod=all`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -47,7 +48,9 @@ export default function DataContextProvider(props) {
     useEffect(() => {
         const getBudget = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/user/${decodedToken._id}`);
+                const res = await 
+                    // fetch(`http://localhost:8080/user/${decodedToken._id}`);
+                    fetch(`https://piggybank-api-jwhz.onrender.com/user/${decodedToken._id}`);
                 const data = await res.json();
                 Array.isArray(data) ? setBudgetData(data) : console.log(data);
             } catch (error) {

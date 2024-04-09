@@ -21,8 +21,8 @@ export default function DialogDeleteTransaction({
 
         try {
             const response = await fetch(
-                `http://localhost:8080/transaction/${tranDeleteId}`,
-
+                // `http://localhost:8080/transaction/${tranDeleteId}`,
+                `https://piggybank-api-jwhz.onrender.com/transaction/${tranDeleteId}`,
                 {
                 method: "DELETE",
                 headers: {

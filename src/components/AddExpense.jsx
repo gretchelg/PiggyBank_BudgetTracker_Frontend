@@ -39,7 +39,8 @@ export default function AddExpense() {
 
             try {
                 const res = await fetch(
-                `http://localhost:8080/transaction`,
+                // `http://localhost:8080/transaction`,
+                `https://piggybank-api-jwhz.onrender.com/transaction`,
                     {
                         method: "POST",
                         headers: {
