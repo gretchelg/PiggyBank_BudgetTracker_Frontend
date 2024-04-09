@@ -24,9 +24,9 @@ export default function Link({ id }) {
         setIsLoading(true);
         setSyncSuccess(false);
         const response = await fetch(
-            `http://localhost:8080/api/transactions/${id}`,
+            // `http://localhost:8080/api/transactions/${id}`,
+            `https://piggybank-api-jwhz.onrender.com/api/transactions/${id}`,
             {
-            // const response = await fetch(`http://localhost:8080/api/transactions/${id}`, {
             method: "GET",
             }
     );
@@ -53,9 +53,9 @@ export default function Link({ id }) {
 
         const exchangePublicTokenForAccessToken = async () => {
             const response = await fetch(
-            `http://localhost:8080/api/set_access_token`,
+            // `http://localhost:8080/api/set_access_token`,
+            `https://piggybank-api-jwhz.onrender.com/api/set_access_token`,
             {
-                // const response = await fetch("http://localhost:8080/api/set_access_token", {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",

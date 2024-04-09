@@ -76,7 +76,7 @@ export default function Transactions() {
       try {
         const response = await fetch(
           `http://localhost:8080/transaction/${id}`,
-
+          `https://piggybank-api-jwhz.onrender.com/transaction/${id}`,
           {
             method: "DELETE",
             headers: {

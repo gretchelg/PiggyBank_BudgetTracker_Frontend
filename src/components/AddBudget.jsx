@@ -43,7 +43,8 @@ export default function Addbudget() {
             try {
                 //Get existing budgets
                 const res = await fetch(
-                    `http://localhost:8080/user/${decodedToken._id}`,
+                    // `http://localhost:8080/user/${decodedToken._id}`,
+                    `https://piggybank-api-jwhz.onrender.com/user/${decodedToken._id}`,
                     {
                     method: "GET", 
                     headers: {
@@ -69,7 +70,8 @@ export default function Addbudget() {
                 // Append the new object to the existing array
 
                 const resPut = await fetch(
-                    `http://localhost:8080/user/${decodedToken._id}`,
+                    // `http://localhost:8080/user/${decodedToken._id}`,
+                    `https://piggybank-api-jwhz.onrender.com/user/${decodedToken._id}`,
                     {
                     method: "PUT",
                     headers: {

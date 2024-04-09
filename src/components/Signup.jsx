@@ -28,7 +28,8 @@ export default function Signup() {
         setIsLoading(true);
 
         const response = await fetch(
-            "http://localhost:8080/user/signup",
+            // "http://localhost:8080/user/signup",
+            `https://piggybank-api-jwhz.onrender.com/user/signup`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
