@@ -21,8 +21,6 @@ export default function DialogConfirm({
     const { token } = useContext(AuthContext);
     const { decodedToken } = useJwt(token);
     
-    console.log("budgetDeleteId:", budgetDeleteId);
-    
     const deleteBudget = async () => {
         setIsLoading(true);
         try {
@@ -45,8 +43,6 @@ export default function DialogConfirm({
             const budgets = currentBudgets.filter(
                 (budget) => budget._id !== budgetDeleteId
             );
-            
-            console.log("updatedBudgets:", budgets);
             
             // Append the new object to the existing array
             const resPut = await fetch(

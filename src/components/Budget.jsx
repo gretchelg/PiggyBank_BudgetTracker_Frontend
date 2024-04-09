@@ -33,22 +33,21 @@ import { ReactComponent as IconWork } from "./svgCategories/work.svg";
 import { ReactComponent as IconTrash } from "./svgCategories/trash.svg";
 
     const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-    })(({ theme, expand }) => ({
-    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-    }),
+        const { expand, ...other } = props;
+            return <IconButton {...other} />;
+        })(({ theme, expand }) => ({
+        
+            transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+            marginLeft: "auto",
+            transition: theme.transitions.create("transform", {
+            duration: theme.transitions.duration.shortest,
+        }),
     }));
     
 export default function Budget() {
     const [expanded, setExpanded] = useState(false);
     const [expandedCat, setExpandedCat] = useState("");
     const {
-    categories,
-    setCategories,
     categoriesObj,
     budgetData,
     setBudgetData,
@@ -65,8 +64,9 @@ export default function Budget() {
     const [budgetDeleteId, setBudgetDeleteId] = useState(null);
 
     const navigate = useNavigate();
+    
     const actions = [
-    { icon: <ManualEntry />, name: "Add Budget", route: "/addbudget" },
+        { icon: <ManualEntry />, name: "Add Budget", route: "/addbudget" },
     ];
 
     const handleActionClick = (route) => {
@@ -79,35 +79,35 @@ export default function Budget() {
     };
 
     const categoryIcons = {
-    bills: IconBills,
-    communication: IconCommunication,
-    eatingOut: IconEatingOut,
-    education: IconEducation,
-    entertainment: IconEntertainment,
-    groceries: IconGroceries,
-    insurance: IconInsurance,
-    medicine: IconMedicine,
-    others: IconOthers,
-    pets: IconPets,
-    rent: IconRent,
-    repairs: IconRepairs,
-    transport: IconTransportation,
-    work: IconWork,
-    food: IconEatingOut,
-    others: IconOthers,
+        bills: IconBills,
+        communication: IconCommunication,
+        education: IconEducation,
+        entertainment: IconEntertainment,
+        food: IconGroceries,
+        insurance: IconInsurance,
+        health: IconMedicine,
+        others: IconOthers,
+        pets: IconPets,
+        home: IconRent,
+        repairs: IconRepairs,
+        transport: IconTransportation,
+        work: IconWork,
+        eatingout: IconEatingOut,
     };
 
     let USDollar = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+        style: "currency",
+        currency: "USD",
     });
+
     let euro = Intl.NumberFormat("en-DE", {
-    style: "currency",
-    currency: "EUR",
+        style: "currency",
+        currency: "EUR",
     });
+
     let pounds = Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP",
+        style: "currency",
+        currency: "GBP",
     });
 
     const handleChange = (panel) => (event, isExpanded) => {
@@ -146,6 +146,7 @@ export default function Budget() {
 
         {budgetData?.map((element) => {
             let spentBudgetBar = 0;
+            
             if (
             categoriesObj[element.category_name]?.spent <
             categoriesObj[element.category_name]?.limit
@@ -184,16 +185,13 @@ export default function Budget() {
                     }}
                 >
                     <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    {/* {(() => {
-                        const Icon =
-                        categoryIcons[
-                            element.category_name
-                            ? element.category_name
-                            : "others"
-                        ];
-
-                        return <Icon style={{ marginRight: "0.5rem" }} />;
-                    })()} */}
+                        {
+                            (() => {
+                                const selection = element.category_name ? element.category_name : "others"
+                                const Icon = categoryIcons[selection]
+                                return <Icon style={{ marginRight: "0.5rem" }} />;
+                            })()
+                        }
                     <Box
                         sx={{
                         display: "flex",
@@ -218,12 +216,11 @@ export default function Budget() {
                         gutterBottom
                         >
                         {/* Budget {element.limit_amount}€/Month */}
-                        {console.log(categoriesObj)}
                         {categoriesObj[element.category_name]
-                            ? Number(element.limit_amount) -
-                            categoriesObj[element.category_name].spent
-                            : Number(element.limit_amount)}{" "}
-                        € remaining
+                            ? (Number(element.limit_amount) -
+                            categoriesObj[element.category_name].spent).toFixed(2)
+                            : (Number(element.limit_amount)).toFixed(2)}{" "}
+                        € remaining budget
                         </Typography>
                     </Box>
 
@@ -254,7 +251,7 @@ export default function Budget() {
                         </Button>
                     </Box>
                     </Box>
-                    <div className="linear-progress-container2">
+                    <div className="linear-progress-container1">
                     <h6
                         className="progress-left"
                         style={
@@ -266,8 +263,8 @@ export default function Budget() {
                         }
                     >
                         {categoriesObj?.hasOwnProperty(element.category_name)
-                        ? `${categoriesObj[element.category_name].spent} €`
-                        : "0 €"}
+                        ? `${categoriesObj[element.category_name].spent} € spent`
+                        : "0 € spent"}
                     </h6>
                     <span
                         className="progress-right"
@@ -337,7 +334,7 @@ export default function Budget() {
                                 className="transaction-item"
                                 sx={{ fontWeight: "bold" }}
                                 >
-                                {USDollar.format(element.tran_amount)}
+                                {euro.format(element.tran_amount)}
                                 </Typography>
                                 <Typography
                                 variant="p"

@@ -20,7 +20,6 @@ import Client from './plaid/Client';
 
 function App() {
   const { token } = useContext(AuthContext);
-  console.log("token:", token)
 
   return (
     <div className="App">

@@ -14,7 +14,6 @@ const [value, setValue] = useState("home");
 const navigate = useNavigate();
 const handleChange = (event, newValue) => {
 setValue(newValue);
-console.log("value", newValue);
 
 if (newValue === "home") {
     navigate("/dashboard");

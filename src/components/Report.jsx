@@ -31,20 +31,18 @@ export default function Reports() {
     const categoryIcons = {
         bills: IconBills,
         communication: IconCommunication,
-        eatingOut: IconEatingOut,
         education: IconEducation,
         entertainment: IconEntertainment,
-        groceries: IconGroceries,
+        food: IconGroceries,
         insurance: IconInsurance,
-        medicine: IconMedicine,
+        health: IconMedicine,
         others: IconOthers,
         pets: IconPets,
-        rent: IconRent,
+        home: IconRent,
         repairs: IconRepairs,
         transport: IconTransportation,
         work: IconWork,
-        food: IconEatingOut,
-        others: IconOthers,
+        eatingout: IconEatingOut,
     };
 return (
     <Container

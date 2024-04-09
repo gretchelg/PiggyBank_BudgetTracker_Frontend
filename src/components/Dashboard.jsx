@@ -12,21 +12,20 @@ import { MenuItem, InputLabel, FormControl, Select } from "@mui/material";
 import { Container, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
-import IconBills from '@mui/icons-material/LocalAtm';
-import IconCommunication from '@mui/icons-material/AddCircle';
-import IconEatingOut from '@mui/icons-material/Dining';
-import IconEducation from '@mui/icons-material/School';
-import IconEntertainment from '@mui/icons-material/Attractions';
-import IconGroceries from '@mui/icons-material/LocalGroceryStore';
-import IconInsurance from '@mui/icons-material/Security';
-import IconMedicine from '@mui/icons-material/MedicationLiquid';
-import IconOthers from '@mui/icons-material/ExpandCircleDownOutlined';
-import IconPets from '@mui/icons-material/PetsOutlined';
-import IconRent from '@mui/icons-material/HomeWorkOutlined';
-import IconRepairs from '@mui/icons-material/HandymanOutlined';
-import IconTransportation from '@mui/icons-material/CommuteOutlined';
-import IconWork from '@mui/icons-material/WorkOutlined';
-
+import { ReactComponent as IconBills } from "./svgCategories/bills.svg";
+import { ReactComponent as IconCommunication } from "./svgCategories/communication.svg";
+import { ReactComponent as IconEatingOut } from "./svgCategories/eating-out.svg";
+import { ReactComponent as IconEducation } from "./svgCategories/education.svg";
+import { ReactComponent as IconEntertainment } from "./svgCategories/entertainment.svg";
+import { ReactComponent as IconGroceries } from "./svgCategories/groceries.svg";
+import { ReactComponent as IconInsurance } from "./svgCategories/insurance.svg";
+import { ReactComponent as IconMedicine } from "./svgCategories/medicine.svg";
+import { ReactComponent as IconOthers } from "./svgCategories/others.svg";
+import { ReactComponent as IconPets } from "./svgCategories/pets.svg";
+import { ReactComponent as IconRent } from "./svgCategories/rent.svg";
+import { ReactComponent as IconRepairs } from "./svgCategories/repairs.svg";
+import { ReactComponent as IconTransportation } from "./svgCategories/transportation.svg";
+import { ReactComponent as IconWork } from "./svgCategories/work.svg";
 
 export default function Dashboard() {
     const [filter, setFilter] = useState("month");
@@ -35,10 +34,8 @@ export default function Dashboard() {
     const [endDate, setEndDate] = useState(Date);
     const [spentBar, setSpentBar] = useState(0);
     const [budgetBar, setBudgetBar] = useState(0);
-
     const { token } = useContext(AuthContext);
     const { decodedToken } = useJwt(token);
-    const [isLoading, setIsLoading] = useState(false);
 
     const {
         categories,
@@ -151,7 +148,6 @@ export default function Dashboard() {
     }, [filter]);
 
     useEffect(() => {
-        console.log("started useEffect(); started to filter tranData", tranData);
     
         const filtered = tranData?.filter((data) => {
             const timestampDate = new Date(data.tran_date).getTime();
@@ -159,16 +155,13 @@ export default function Dashboard() {
         });
     
         setFilteredData(filtered);
-        console.log("ended useEffect(); filtered is", filtered);
 
     }, [tranData, endDate, startDate]);
 
     const creditTrans = filteredData?.filter((trans) => trans.tran_sign === "CR");
-    console.log("creditTrans is", creditTrans);
 
 // setCreditTrans(creditTrans);
     const debitTrans = filteredData?.filter((trans) => trans.tran_sign === "DR");
-    console.log("debitTrans is", debitTrans);
 
 // setDebitTrans(debitTrans);
     const incomeSum = creditTrans
@@ -187,15 +180,6 @@ export default function Dashboard() {
     )
     .toFixed(2);
 
-    let expensesSumBudgets = 0;
-
-    categories.map((category) => {
-
-        if (category.limit > 0) {
-        expensesSumBudgets = Number(expensesSumBudgets + category.spent).toFixed(2);
-        }
-
-    });
 
 //==============================================================
 //  Calculate budgets
@@ -211,6 +195,16 @@ export default function Dashboard() {
 
     const savings = incomeSum - budgetSum - expensesSum;
 
+//  Calculate remaining balance
+    let expensesSumBudgets = 0;
+    let remainingBudget = 0
+
+    categories.map((category) => {
+        expensesSumBudgets = Number(expensesSumBudgets + category.spent);
+    });
+
+    remainingBudget = budgetSum - expensesSumBudgets
+
 //  Graph Bar
     useEffect(() => {
         if (expensesSum !== 0) {
@@ -220,32 +214,29 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (expensesSumBudgets !== 0) {
-          setBudgetBar((expensesSumBudgets * 100) / budgetSum);
+          setBudgetBar(((remainingBudget * 100) / budgetSum));
         }
     }, [expensesSumBudgets]);
+
 
 // =========================================================================
 //  FILTER BY CATEGORY
 // ========================================================================
-    console.log("start Date", startDate);
-    console.log("end Date", endDate);
 
     const categoryIcons = {
         bills: IconBills,
         communication: IconCommunication,
-        eatingOut: IconEatingOut,
         education: IconEducation,
         entertainment: IconEntertainment,
-        groceries: IconGroceries,
+        food: IconGroceries,
         insurance: IconInsurance,
-        medicine: IconMedicine,
-        others: IconOthers,
+        health: IconMedicine,
         pets: IconPets,
-        rent: IconRent,
+        home: IconRent,
         repairs: IconRepairs,
         transport: IconTransportation,
         work: IconWork,
-        food: IconEatingOut,
+        eatingout: IconEatingOut,
         others: IconOthers,
     };
 
@@ -378,7 +369,7 @@ export default function Dashboard() {
                     </Box>
 
                     <p style={{ color: styling.txtColor }} className="spent-title">
-                        Budget
+                        Remaining Budget
                     </p>
 
                     <Box className="linear-progress-container2">
@@ -387,7 +378,7 @@ export default function Dashboard() {
                             className="progress-left"
                             variant="h5"
                         >
-                            {expensesSumBudgets} €
+                            {remainingBudget.toFixed(2)} €
                         </Typography>
 
                         <Typography
@@ -425,24 +416,14 @@ export default function Dashboard() {
                     }}
                     style={{ cursor: "grab" }}
                 >
-                     <Box className="swiper">
+                    <Box className="swiper">
                         <Box className="swiper-wrapper">
                         {budgetData?.map((each) => {
-                            let spentBudgetBar = 0;
-                                if (
-                                categoriesObj[each.category_name]?.spent <
-                                categoriesObj[each.category_name]?.limit
-                                ) {
-                                spentBudgetBar =
-                                    (categoriesObj[each.category_name].spent * 100) /
-                                    categoriesObj[each.category_name].limit;
-                                }
-                                if (
-                                categoriesObj[each.category_name]?.spent >
-                                categoriesObj[each.category_name]?.limit
-                                ) {
-                                spentBudgetBar = 100;
-                                }
+                        
+                                const categoryObjField = categoriesObj[each.category_name]
+                                // const {limit, spent} = categoriesObj[each.category_name]
+                                const {limit, spent} = categoryObjField
+                                const remainingBudgetBar = ((limit - spent) / limit) * 100;
 
                             return (
                                 <Box
@@ -454,24 +435,13 @@ export default function Dashboard() {
                                 >
 
                                     <Box className="dash-budget">
-                                        {/* {
+                                        {
                                         (() => {
                                             var selection = each.category_name ? each.category_name : "others"
-                                            // const selection = "food"
-                                            // selection = String(selection)
-                                            console.log("selection typeof: ", typeof selection)
-                                            console.log("selection VALUE: ", selection)
                                             const Icon = categoryIcons[selection]
-                                            // categoryIcons[
-                                                // each.category_name ? each.category_name : "others"
-                                            // ];
-                                            console.log("ICON VALUE: ", Icon)
-
-                                            // return <IconEatingOut/>
-                                            return <Icon/>
-                                            // return <Icon className="dash-icon-title" />;
+                                            return <Icon className="dash-icon-title" />;
                                         })()
-                                        } */}
+                                        }
 
                                         <Box className="dash-budget-wrapper">
 
@@ -484,18 +454,20 @@ export default function Dashboard() {
                                             )}
                                             </p>
 
-                                            <p
+                                            <Typography
                                                 style={{ color: styling.txtColor }}
                                                 className="dash-budget-info"
                                             >
-                                                {categoriesObj[each.category_name]
-                                                    ? Number(each.limit_amount) -
-                                                    categoriesObj[each.category_name].spent
-                                                    : Number(each.limit_amount)}
-                                                € Remaining
-                                            </p>
+                                                {categoriesObj?.hasOwnProperty(each.category_name)
+                                                ? `${categoriesObj[each.category_name].spent}  € spent`
+                                                : "0  € spent"}
+                                            </Typography>
                                         </Box>
                                     </Box>
+
+                                    <p style={{ color: styling.txtColor }} className="spent-title">
+                                        Remaining Budget
+                                    </p>
 
                                     <Box className="linear-progress-container2">
                                         <Typography
@@ -508,9 +480,12 @@ export default function Dashboard() {
                                             className="progress-left"
                                             variant="h5"
                                         >
-                                            {categoriesObj?.hasOwnProperty(each.category_name)
-                                            ? `${categoriesObj[each.category_name].spent} $`
-                                            : "0 $"}
+
+                                            {categoriesObj[each.category_name]
+                                            ? (Number(each.limit_amount) -
+                                            categoriesObj[each.category_name].spent).toFixed(2)
+                                            : (Number(each.limit_amount)).toFixed(2)}
+                                            €
                                         </Typography>
 
                                         <Typography
@@ -528,7 +503,7 @@ export default function Dashboard() {
 
                                         <LinearProgress
                                             variant="determinate"
-                                            value={spentBudgetBar}
+                                            value={remainingBudgetBar}
                                         />
                                     </Box>
                                 </Box>

@@ -142,19 +142,23 @@ export default function AddExpense() {
                                         Bills
                                     </MenuItem>
 
-                                    <MenuItem value={"rent"} sx={{ fontSize: "16px" }}>
-                                        Rent
+                                    <MenuItem value={"home"} sx={{ fontSize: "16px" }}>
+                                        Home
                                     </MenuItem>
 
-                                    <MenuItem value={"medicine"} sx={{ fontSize: "16px" }}>
-                                        Medicine
+                                    <MenuItem value={"transport"} sx={{ fontSize: "16px" }}>
+                                        Transport
                                     </MenuItem>
 
-                                    <MenuItem value={"groceries"} sx={{ fontSize: "16px" }}>
-                                        Groceries
+                                    <MenuItem value={"health"} sx={{ fontSize: "16px" }}>
+                                        Health
                                     </MenuItem>
 
-                                    <MenuItem value={"eatingOut"} sx={{ fontSize: "16px" }}>
+                                    <MenuItem value={"food"} sx={{ fontSize: "16px" }}>
+                                        Food
+                                    </MenuItem>
+
+                                    <MenuItem value={"eatingout"} sx={{ fontSize: "16px" }}>
                                         Eating Out
                                     </MenuItem>
 

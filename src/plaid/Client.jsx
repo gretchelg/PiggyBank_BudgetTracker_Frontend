@@ -16,7 +16,6 @@ export default function Client() {
         });
 
     const data = await response.json();
-    console.log("Link completed successfully");
     setLinkToken(data.link_token);
     };
 
