@@ -30,10 +30,8 @@ export default function AuthContextProvider(props) {
 
         if(linkToken) {
             localStorage.setItem("linkToken", linkToken)
-            console.log("store linktoken")
         } else {
             localStorage.removeItem("linkToken")
-            console.log("remove linktoken")
         }
     }, [token, linkToken]);
 

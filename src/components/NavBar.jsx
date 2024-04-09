@@ -19,8 +19,6 @@ export default function NavBar() {
     const open = Boolean(anchorEl);
     const location = useLocation();
 
-    console.log("Current route:", location.pathname);
-
     const handleClick = () => {
         localStorage.removeItem("token");
         setTranData([]);
@@ -91,7 +89,6 @@ export default function NavBar() {
     };
 
     const currentPage = page();
-    console.log("Current page:", currentPage);
     
     const paperStyles = {
         // Customize the background color here

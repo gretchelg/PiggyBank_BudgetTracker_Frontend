@@ -47,7 +47,6 @@ export default function Transactions() {
     const { tranData, setTranData, refresh, setRefresh } = useContext(DataContext);
     const { token } = useContext(AuthContext);
     const { styling } = useContext(ThemeContext);
-    console.log(tranData);
 
     //handlers
     const handleOpen = () => {
@@ -75,7 +74,6 @@ export default function Transactions() {
 
     const handleDeleteTransaction = async (id) => {
       try {
-        console.log(id);
         const response = await fetch(
           `http://localhost:8080/transaction/${id}`,
 

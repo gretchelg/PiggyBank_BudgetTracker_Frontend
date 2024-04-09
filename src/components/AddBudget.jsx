@@ -16,7 +16,7 @@ import "./style/AddBudget.css";
 
 
 export default function Addbudget() {
-    const { budgetData, setBudgetData, refresh, setRefresh } = useContext(DataContext);
+    const { refresh, setRefresh } = useContext(DataContext);
     const { token } = useContext(AuthContext);
     const { styling } = useContext(ThemeContext);
     const [alert, setAlert] = useState(false);
@@ -24,7 +24,6 @@ export default function Addbudget() {
     const { decodedToken } = useJwt(token);
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(null);
-    const [currency, setCurrency] = useState("€");
     const [amount, setAmount] = useState(""); //last
     const [category, setCategory] = useState("");
 
@@ -39,7 +38,7 @@ export default function Addbudget() {
             setAlert(<Alert severity="warning">Please fill in all the fields</Alert>);
         
         } else {
-           
+        
             setIsLoading(true);
             try {
                 //Get existing budgets

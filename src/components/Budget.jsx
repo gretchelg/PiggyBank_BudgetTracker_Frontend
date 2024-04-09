@@ -48,8 +48,6 @@ export default function Budget() {
     const [expanded, setExpanded] = useState(false);
     const [expandedCat, setExpandedCat] = useState("");
     const {
-    categories,
-    setCategories,
     categoriesObj,
     budgetData,
     setBudgetData,
@@ -218,7 +216,6 @@ export default function Budget() {
                         gutterBottom
                         >
                         {/* Budget {element.limit_amount}€/Month */}
-                        {console.log(categoriesObj)}
                         {categoriesObj[element.category_name]
                             ? (Number(element.limit_amount) -
                             categoriesObj[element.category_name].spent).toFixed(2)

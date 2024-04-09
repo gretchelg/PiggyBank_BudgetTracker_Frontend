@@ -34,10 +34,8 @@ export default function Dashboard() {
     const [endDate, setEndDate] = useState(Date);
     const [spentBar, setSpentBar] = useState(0);
     const [budgetBar, setBudgetBar] = useState(0);
-
     const { token } = useContext(AuthContext);
     const { decodedToken } = useJwt(token);
-    const [isLoading, setIsLoading] = useState(false);
 
     const {
         categories,
@@ -150,7 +148,6 @@ export default function Dashboard() {
     }, [filter]);
 
     useEffect(() => {
-        console.log("started useEffect(); started to filter tranData", tranData);
     
         const filtered = tranData?.filter((data) => {
             const timestampDate = new Date(data.tran_date).getTime();
@@ -158,16 +155,13 @@ export default function Dashboard() {
         });
     
         setFilteredData(filtered);
-        console.log("ended useEffect(); filtered is", filtered);
 
     }, [tranData, endDate, startDate]);
 
     const creditTrans = filteredData?.filter((trans) => trans.tran_sign === "CR");
-    console.log("creditTrans is", creditTrans);
 
 // setCreditTrans(creditTrans);
     const debitTrans = filteredData?.filter((trans) => trans.tran_sign === "DR");
-    console.log("debitTrans is", debitTrans);
 
 // setDebitTrans(debitTrans);
     const incomeSum = creditTrans
@@ -206,15 +200,10 @@ export default function Dashboard() {
     let remainingBudget = 0
 
     categories.map((category) => {
-    
-        // if (category.limit > 0) {
         expensesSumBudgets = Number(expensesSumBudgets + category.spent);
-        console.log("typeof expensesSumBudgets:", typeof expensesSumBudgets)
-        // }
     });
 
     remainingBudget = budgetSum - expensesSumBudgets
-    console.log("##remaining budget: ",  remainingBudget)
 
 //  Graph Bar
     useEffect(() => {
@@ -233,8 +222,6 @@ export default function Dashboard() {
 // =========================================================================
 //  FILTER BY CATEGORY
 // ========================================================================
-    console.log("start Date", startDate);
-    console.log("end Date", endDate);
 
     const categoryIcons = {
         bills: IconBills,

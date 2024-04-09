@@ -49,8 +49,6 @@ export default function DataContextProvider(props) {
             try {
                 const res = await fetch(`http://localhost:8080/user/${decodedToken._id}`);
                 const data = await res.json();
-                console.log("###budget data", data);
-
                 Array.isArray(data) ? setBudgetData(data) : console.log(data);
             } catch (error) {
                 console.log(error);
@@ -91,9 +89,9 @@ export default function DataContextProvider(props) {
                 budgetData?.map((budget) => {
 
                     if (groupedObjects[budget.category_name]) {
+
                         groupedObjects[budget.category_name].limit = 
                         Number(budget.limit_amount)
-                        console.log("##categoryobject: ", groupedObjects[budget.category_name]);
                     }
                 });
 
@@ -108,9 +106,6 @@ export default function DataContextProvider(props) {
             }
         }
     }, [tranData, budgetData]);
-
-    console.log("transaction data:", tranData);
-    console.log("Budget data: ", budgetData)
 
     return (
         <DataContext.Provider

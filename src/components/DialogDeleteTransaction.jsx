@@ -20,7 +20,6 @@ export default function DialogDeleteTransaction({
         setIsLoading(true);
 
         try {
-            console.log(tranDeleteId);
             const response = await fetch(
                 `http://localhost:8080/transaction/${tranDeleteId}`,
 

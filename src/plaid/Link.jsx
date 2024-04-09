@@ -20,8 +20,6 @@ export default function Link({ id }) {
     const [syncCount, setSyncCount] = useState(1);
     const navigate = useNavigate();
 
-    console.log("START LINK....", id);
-
     const handleGetTransaction = async () => {
         setIsLoading(true);
         setSyncSuccess(false);
@@ -77,7 +75,6 @@ export default function Link({ id }) {
             }
 
             const data = await response.json();
-            console.log("data:", data);
             setLinkSuccess(true);
         };
     exchangePublicTokenForAccessToken();
@@ -89,8 +86,6 @@ export default function Link({ id }) {
     };
 
     const { open, ready } = usePlaidLink(config);
-
-    console.log("Transactions here:", transactions);
 
     const handleGoBack = () => {
         navigate("/transactions");
