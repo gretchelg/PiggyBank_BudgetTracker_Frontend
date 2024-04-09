@@ -419,12 +419,13 @@ export default function Dashboard() {
                     <Box className="swiper">
                         <Box className="swiper-wrapper">
                         {budgetData?.map((each) => {
-                        
+                            console.log("##categoriesObj[each.category_name] ", categoriesObj[each.category_name])
                                 const categoryObjField = categoriesObj[each.category_name]
-                                // const {limit, spent} = categoriesObj[each.category_name]
-                                const {limit, spent} = categoryObjField
-                                const remainingBudgetBar = ((limit - spent) / limit) * 100;
-
+                                let remainingBudgetBar = 0;
+                                if (categoryObjField) {
+                                    const {limit, spent} = categoryObjField
+                                    remainingBudgetBar = ((limit - spent) / limit) * 100;
+                                }
                             return (
                                 <Box
                                     style={{
