@@ -49,11 +49,7 @@ export default function Dashboard() {
 
     const { styling } = useContext(ThemeContext);
 
-//===========================
-//  Library Initialization
-//===========================
-
-// init Swiper:
+    // init Swiper:
     const swiper = new Swiper(".swiper", {
         direction: "horizontal",
         loop: true,
@@ -63,10 +59,7 @@ export default function Dashboard() {
         },
     });
 
-// =========================================================================
-//  Filter Data
-// ========================================================================
-
+    // filter data by date
     useEffect(() => {
         const now = new Date();
 
@@ -256,7 +249,7 @@ export default function Dashboard() {
             <Grid container className="dash-container">
 
 {/* ===============================================
-                FILTER
+    FILTER BY DATE DROPDOWN
     ============================================= */}
                 <Grid item xs={12}>
                     <Box component="div" className="transaction-filter">
@@ -316,7 +309,7 @@ export default function Dashboard() {
                 </Grid>
 
 {/* =========================================
-                BALANCE
+    BALANCE OVERVIEW
     ====================================== */}
                 <Link
                     to="/transactions"
@@ -326,6 +319,9 @@ export default function Dashboard() {
                         backgroundColor: styling.backgroundBoard,
                     }}
                 >
+{/* =========================================
+    CURRENT BALANCE
+    ====================================== */}
                     <p style={{ color: styling.txtColor }} className="current-balance">
                         Current Balance
                     </p>
@@ -334,7 +330,9 @@ export default function Dashboard() {
                         {" "}
                         {(incomeSum - expensesSum).toFixed(2)} €
                     </h2>
-
+{/* =========================================
+    EXPECTED SAVINGS
+    ====================================== */}
                     <p style={{ color: styling.txtColor }} className="dash-expected">
                         Expected savings: {savings.toFixed(2)} €
                     </p>
@@ -344,7 +342,9 @@ export default function Dashboard() {
                     </p>
 
                     <Box className="linear-progress-container1">
-
+{/* =========================================
+    TOTAL SPENT - LEFT PROGRESS BAR
+    ====================================== */}
                         <Typography
                             style={spentBar > 10 ? { color: "white" } : { color: "black" }}
                             className="progress-left"
@@ -352,7 +352,9 @@ export default function Dashboard() {
                         >
                             {expensesSum} €
                         </Typography>
-
+{/* =========================================
+    TOTAL INCOME - RIGHT PROGRESS BAR
+    ====================================== */}
                         <Typography
                             style={spentBar > 90 ? { color: "white" } : { color: "black" }}
                             className="progress-right"
@@ -367,7 +369,9 @@ export default function Dashboard() {
                         />
 
                     </Box>
-
+{/* =========================================
+    REMAINING BUDGET - LEFT PROGRESS BAR
+    ====================================== */}
                     <p style={{ color: styling.txtColor }} className="spent-title">
                         Remaining Budget
                     </p>
@@ -380,7 +384,9 @@ export default function Dashboard() {
                         >
                             {remainingBudget.toFixed(2)} €
                         </Typography>
-
+{/* ==============================================
+    TOTAL BUDGET ALLOCATION - RIGHT PROGRESS BAR
+    ============================================== */}
                         <Typography
                             style={budgetBar > 90 ? { color: "white" } : { color: "black" }}
                             className="progress-right"
@@ -399,29 +405,31 @@ export default function Dashboard() {
                 </Link>
 
 {/* ===================================
-                Charts
+    CHART REPRESENTATION OF SPENDINGS
 ====================================== */}
                 <Charts />
 
 {/* ===================================
-                Budget
+    BUDGET ALLOCATION OVERVIEW
 ====================================== */}
                 <Grid
                     item
                     xs={12}
                     sx={{
-                        // paddingTop: "1rem",
-                        // paddingBottom: "1rem",
                         textAlign: "center",
                     }}
                     style={{ cursor: "grab" }}
                 >
                     <Box className="swiper">
                         <Box className="swiper-wrapper">
+
                         {budgetData?.map((each) => {
-                            console.log("##categoriesObj[each.category_name] ", categoriesObj[each.category_name])
+                            
                                 const categoryObjField = categoriesObj[each.category_name]
                                 let remainingBudgetBar = 0;
+{/* ========================================
+    CALCULATE REMAINING BUDGET PER CATEGORY
+============================================ */}                               
                                 if (categoryObjField) {
                                     const {limit, spent} = categoryObjField
                                     remainingBudgetBar = ((limit - spent) / limit) * 100;
@@ -434,7 +442,9 @@ export default function Dashboard() {
                                     }}
                                     className="swiper-slide"
                                 >
-
+{/* ========================================
+    DISPLAY CORRESPONDING CATEGORY ICON
+============================================ */}  
                                     <Box className="dash-budget">
                                         {
                                         (() => {
