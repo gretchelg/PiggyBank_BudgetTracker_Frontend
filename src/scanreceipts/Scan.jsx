@@ -9,7 +9,7 @@ Box,
 Input,
 } from "@mui/material";
 import axios from "axios";
-import mindee from "./Mindee";
+import receiptscanner from "./receiptscanner";
 import { AuthContext } from "../context/AuthContext";
 import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
@@ -45,23 +45,26 @@ export default function Scan() {
     navigate("/transactions");
     };
 
+    // Call API to upload the image receipt to cloudinary
     const onSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
         const formData = new FormData();
         formData.append("picture", image, image.name);
-
         const res = await axios.post(
         // "http://localhost:8080/api/upload",
         `https://piggybank-api-jwhz.onrender.com/api/upload`,
         formData
         );
 
-        const mindeeResponse = await mindee.parseReceipt(res.data.url);
-        const transaction =
-            mindee.convertMindeeResponseToTransaction(mindeeResponse);
-            mindee.saveTransaction(token, transaction);
+
+        // call to MINDEE API to scan receipt
+
+        const transaction = await receiptscanner.parseReceipt(res.data.url);
+
+        // Save to DB the scanned receipt transaction
+        receiptscanner.saveTransaction(token, transaction);
             setTrans(transaction);
             setRefresh(!refresh);
             setError(false);
@@ -163,9 +166,6 @@ export default function Scan() {
                     mt: 8,
                     transition: "all 0.3s ease",
                     "&:hover": { transform: "scale(1.1)" },
-                    // mt: 8,
-                    // transition: "all 0.3s ease",
-                    // ":hover": { bgcolor: "#c80048", color: "white" },
                     borderRadius: "31px",
                     background: "#white",
                     width: "150px",
@@ -173,7 +173,6 @@ export default function Scan() {
                     color: "#c80048",
                     fontSize: "10px",
                     textDecoration: "none",
-                    // "&:hover": { transform: "scale(1.1)" },
                     }}
                 >
                     <Typography variant="h5"> Submit</Typography>
@@ -186,9 +185,6 @@ export default function Scan() {
                     mt: 8,
                     transition: "all 0.3s ease",
                     "&:hover": { transform: "scale(1.1)" },
-                    // mt: 8,
-                    // transition: "all 0.3s ease",
-                    // ":hover": { bgcolor: "#c80048", color: "white" },
                     borderRadius: "31px",
                     background: "#white",
                     width: "150px",
@@ -196,7 +192,6 @@ export default function Scan() {
                     color: "#c80048",
                     fontSize: "10px",
                     textDecoration: "none",
-                    // "&:hover": { transform: "scale(1.1)" },
                     }}
                 >
                     <Typography variant="h5"> CLOSE</Typography>

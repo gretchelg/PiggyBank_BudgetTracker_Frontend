@@ -18,14 +18,16 @@ async function parseReceipt(imageURL){
             }
         )
     } catch(e){
-        console.log("ERROR: MINDEE responded with error", e)
+        console.log("ERROR: MINDEE OCR responded with error", e)
         return 
     }
     
     const mindeeResponseBody = await mindeeResponse.json()
-    return mindeeResponseBody.document
+
+    return convertMindeeResponseToTransaction(mindeeResponseBody.document)
 }
 
+// convert Mindee response to Transaction schema before saving
 function convertMindeeResponseToTransaction(mindeeResponse) {
     const transaction = {
         category_name: mindeeResponse.inference.prediction.category.value,
@@ -39,6 +41,7 @@ function convertMindeeResponseToTransaction(mindeeResponse) {
     return transaction
 }
 
+// Post scan receipt transaction save to DB
 const saveTransaction = async (token, transaction) => {
     try {
         const res = await fetch(
@@ -54,12 +57,12 @@ const saveTransaction = async (token, transaction) => {
             }
         );
         if (!res.ok) {
-            console.log("ERROR: saveTransaction() not ok: ", res)
+            console.log("ERROR: Couldn't save the transction: ", res)
             return
         }
-        console.log("OK: saveTransaction succeeded")
+        console.log("OK: Transaction save successfully")
     } catch (error) {
-        console.log("ERROR: saveTransaction() failed: ", error)
+        console.log("Error occured while posting the transaction ", error)
         return
     };
 }
