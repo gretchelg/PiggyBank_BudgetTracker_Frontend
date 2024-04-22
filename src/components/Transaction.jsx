@@ -16,11 +16,6 @@ import ManualEntry from '@mui/icons-material/EditNoteOutlined';
 import Trash from '@mui/icons-material/DeleteOutlineOutlined';
 import DialogDeleteTransaction from "./DialogDeleteTransaction";
 
-// import ScanReceipt from "./svg/IconScanReciept";
-// import LinkAccount from "./svg/IconPayWithCard";
-// import ManualEntry from "./svg/IconManuallyEnter";
-// import { ReactComponent as Trash } from "./svgCategories/trash-icon.svg";
-
   const actions = [
     { icon: <LinkAccount />, name: "Link", route: "/link" },
     { icon: <ManualEntry />, name: "Expense", route: "/addexpense" },
@@ -84,7 +79,6 @@ export default function Transactions() {
     useEffect(() => {
 
       // set the end date filter
-      const now = new Date();
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
