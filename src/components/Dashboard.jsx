@@ -157,12 +157,12 @@ export default function Dashboard() {
     .toFixed(2);
 
     //  Expected savings
-    const toDebit = budgetSum
-    if (expensesSum > budgetSum) {
-        toDebit = expensesSum
+    let toDebit = Number(budgetSum)
+    if (Number(expensesSum) > Number(budgetSum)) {
+        toDebit = Number(expensesSum)
     }
 
-    const savings = incomeSum - toDebit;
+    const savings = Number(incomeSum) - toDebit;
 
     //  Calculate remaining balance
     let expensesSumBudgets = 0;
