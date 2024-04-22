@@ -29,7 +29,6 @@ export default function Transactions() {
     //state
     const [transaction, setTransaction] = useState("expenses");
     const [filter, setFilter] = useState("");
-    const [category_name, setCategory] = useState("");
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [open, setOpen] = useState(false);
@@ -40,7 +39,7 @@ export default function Transactions() {
     //navigate
     const navigate = useNavigate();
     //context
-    const { tranData, setTranData, refresh, setRefresh } = useContext(DataContext);
+    const { tranData, refresh, setRefresh } = useContext(DataContext);
     const { token } = useContext(AuthContext);
     const { styling } = useContext(ThemeContext);
 
