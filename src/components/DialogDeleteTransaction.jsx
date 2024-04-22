@@ -20,6 +20,7 @@ export default function DialogDeleteTransaction({
         setIsLoading(true);
 
         try {
+        
             const response = await fetch(
                 // `http://localhost:8080/transaction/${tranDeleteId}`,
                 `https://piggybank-api-jwhz.onrender.com/transaction/${tranDeleteId}`,
@@ -35,10 +36,11 @@ export default function DialogDeleteTransaction({
             if (response.ok) {
                 // Transaction successfully deleted
                 const deletedTransaction = await response.json();
-                console.log(deletedTransaction);
+ 
                 // Perform any necessary actions after deletion
             } else {
                 // Transaction not found or other error occurred
+            
                 const errorData = await response.json();
                 console.error(errorData.error);
             }

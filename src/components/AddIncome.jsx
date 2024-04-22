@@ -53,7 +53,7 @@ export default function AddIncome() {
                             tran_description,
                             tran_amount,
                             tran_sign: "CR", //DR (income) or CR(expense)
-                            tran_currency: "US",
+                            tran_currency: "DE",
                             tran_date,
                             user,
                         }),
