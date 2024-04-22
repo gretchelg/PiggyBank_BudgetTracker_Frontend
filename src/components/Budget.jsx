@@ -8,6 +8,7 @@ import { SpeedDial, SpeedDialAction} from "@mui/material";
 import { Backdrop, Container, Box, LinearProgress } from "@mui/material";
 import { Button, Card, CardContent, Typography} from "@mui/material";
 import { Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
+import { MenuItem, InputLabel, FormControl, Select } from "@mui/material";
 
 import ManualEntry from "@mui/icons-material/EditNoteOutlined";
 import AddIcon from "@mui/icons-material/Add";
@@ -44,6 +45,7 @@ export default function Budget() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [budgetDeleteName, setBudgetDeleteName] = useState("false");
     const [budgetDeleteId, setBudgetDeleteId] = useState(null);
+    const [filter, setFilter] = useState("month");
 
     const navigate = useNavigate();
     
@@ -116,6 +118,65 @@ export default function Budget() {
             setRefresh={setRefresh}
         />
         ) : null}
+
+        <Box component="div" className="transaction-filter">
+            <FormControl fullWidth>
+                {/* Filter dashboard info by date */}
+                <InputLabel
+                    sx={{ fontSize: " 20px" }}
+                    id="demo-simple-select-label"
+                >
+                    Filter
+                </InputLabel>
+
+                <Select
+                    style={{
+                    backgroundColor: styling.backgroundBoard,
+                    borderRadius: "15px",
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filter}
+                    label="Filter"
+                    onChange={(e) => setFilter(e.target.value)}
+                    sx={{
+                    textAlign: "left",
+                    "& fieldset": {
+                        borderRadius: "15px",
+                    },
+                    fontSize: "15px",
+                    }}
+                >
+                    <MenuItem value={"all"} sx={{ fontSize: "14px" }}>
+                        All
+                    </MenuItem>
+                    
+                    <MenuItem value={"week"} sx={{ fontSize: "14px" }}>
+                        Last Week
+                    </MenuItem>
+                    
+                    <MenuItem value={"month"} sx={{ fontSize: "14px" }}>
+                        Last Month
+                    </MenuItem>
+                    
+                    <MenuItem value={"3months"} sx={{ fontSize: "14px" }}>
+                        Last 3 Months
+                    </MenuItem>
+                    
+                    <MenuItem value={"6months"} sx={{ fontSize: "14px" }}>
+                        Last 6 Months
+                    </MenuItem>
+                    
+                    <MenuItem value={"year"} sx={{ fontSize: "14px" }}>
+                        Last Year
+                    </MenuItem>
+
+                </Select>
+            </FormControl>
+        </Box>
+        
+        <Box>-</Box>
+
         <Box
         sx={{
             height: 600,

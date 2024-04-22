@@ -431,7 +431,7 @@ export default function Dashboard() {
                                     <Box className="dash-budget">
                                         {
                                         (() => {
-                                            // SELECT CORRESPONDING CATEGORY ICON
+                                            //  CORRESPONDING CATEGORY ICON
                                             var selection = each.category_name ? each.category_name : "others"
                                             const Icon = categoryIcons[selection]
                                             return <Icon className="dash-icon-title" />;
