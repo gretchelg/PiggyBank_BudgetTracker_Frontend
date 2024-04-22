@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext"; 
 import { ThemeContext } from "../context/ThemeContext";
@@ -46,6 +46,9 @@ export default function Budget() {
     const [budgetDeleteName, setBudgetDeleteName] = useState("false");
     const [budgetDeleteId, setBudgetDeleteId] = useState(null);
     const [filter, setFilter] = useState("month");
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [filteredData, setFilteredData] = useState([]);
 
     const navigate = useNavigate();
     
@@ -89,14 +92,102 @@ export default function Budget() {
     setExpanded(isExpanded ? panel : false);
     };
 
-    // Calculate remaining budget for each category
-    const calcRemainingBudget = el => {
-        const remainingBudget = categoriesObj[el.category_name] ? (Number(el.limit_amount) -
-            categoriesObj[el.category_name].spent).toFixed(2)
-            : (Number(el.limit_amount)).toFixed(2)
+    // filter data by date
+    useEffect(() => {
 
-        return remainingBudget
+        const today = new Date()
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        setEndDate(tomorrow);
+
+    }, []);
+
+    useEffect(() => {
+        const now = new Date();
+
+        if (filter === "month") {
+            const lastMonth = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDate()
+            ).getTime();
+            setStartDate(lastMonth);
+        }
+
+        if (filter === "3months") {
+            const last3Months = new Date(
+            now.getFullYear(),
+            now.getMonth() - 3,
+            now.getDate()
+            ).getTime();
+            setStartDate(last3Months);
+        }
+
+        if (filter === "6months") {
+            const last6Months = new Date(
+            now.getFullYear(),
+            now.getMonth() - 6,
+            now.getDate()
+            ).getTime();
+            setStartDate(last6Months);
+        }
+
+        if (filter === "year") {
+            const lastYear = new Date(
+            now.getFullYear() - 1,
+            now.getMonth(),
+            now.getDate()
+            ).getTime();
+            setStartDate(lastYear);
+        }
+
+        if (filter === "all") {
+            const last5Years = new Date(
+            now.getFullYear() - 5,
+            now.getMonth(),
+            now.getDate()
+            ).getTime();
+            setStartDate(last5Years);
+        }
+
+    }, [filter]);
+
+    useEffect(() => {
+    
+        const filtered = tranData?.filter((data) => {
+            const timestampDate = new Date(data.tran_date).getTime();
+            return timestampDate < endDate && timestampDate > startDate;
+        });
+    
+        setFilteredData(filtered);
+
+    }, [tranData, endDate, startDate]);
+
+    const getTxnSummaryByCategory = (category, txns) =>
+        txns.filter(txn => txn.category_name === category)
+            .reduce((accum, txn) => {
+                return {
+                    total: accum.total + Number(txn.tran_amount),
+                    count: accum.count +1,
+                }
+            }, { total: 0, count: 0 })
+            
+    const getLimitAmount = (category, budgetsObj) => {
+        if (budgetsObj[category]) {
+            return Number(budgetsObj[category].limit)
+        } 
+
+        return 0
     }
+
+    // Calculate remaining budget for a given category
+    const calcRemainingBudget = (category, txns) => {
+        const spent = getTxnSummaryByCategory(category, txns).total
+        const limitAmount = getLimitAmount(category, categoriesObj)
+
+        return (limitAmount - spent).toFixed(2)
+    }
+
 
     return (
     <Container
@@ -149,10 +240,6 @@ export default function Budget() {
                 >
                     <MenuItem value={"all"} sx={{ fontSize: "14px" }}>
                         All
-                    </MenuItem>
-                    
-                    <MenuItem value={"week"} sx={{ fontSize: "14px" }}>
-                        Last Week
                     </MenuItem>
                     
                     <MenuItem value={"month"} sx={{ fontSize: "14px" }}>
@@ -261,7 +348,7 @@ export default function Budget() {
                         gutterBottom
                         >
                         {/* Show remaining budget */}
-                        {calcRemainingBudget(element)}{" "}
+                        {calcRemainingBudget(element.category_name, filteredData)}{" "}
                         € remaining budget
                         </Typography>
                     </Box>
@@ -293,7 +380,8 @@ export default function Budget() {
                         />
                         </Button>
                     </Box>
-                    </Box>
+                </Box>
+
                     <div className="linear-progress-container1">
                     {/* Show the running spent amount in progress bar */}
                     <h6
@@ -307,8 +395,9 @@ export default function Budget() {
                         }
                     >
                         {categoriesObj?.hasOwnProperty(element.category_name)
-                        ? `${categoriesObj[element.category_name].spent.toFixed(2)} € spent`
-                        : "0 € spent"}
+                            ? `${getTxnSummaryByCategory(element.category_name, filteredData).total.toFixed(2)} € spent`
+                            : "0 € spent"
+                        }
                     </h6>
                     {/* Show the set limit amount in progress bar */}
                     <span
@@ -344,7 +433,7 @@ export default function Budget() {
                     ></AccordionSummary>
                     <AccordionDetails>
                         {/* Show detailed spent transaction per category */}
-                        {tranData
+                        {filteredData
                         .filter(
                             (item) =>
                             item.tran_sign === "DR" &&

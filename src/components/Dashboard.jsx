@@ -58,34 +58,16 @@ export default function Dashboard() {
 
     // filter data by date
     useEffect(() => {
-        const now = new Date();
+
         const today = new Date()
         const tomorrow = new Date(today)
         tomorrow.setDate(tomorrow.getDate() + 1)
-        // setEndDate(tomorrow.getTime());
         setEndDate(tomorrow);
-
-        const last5Years = new Date(
-            now.getFullYear() - 5,
-            now.getMonth(),
-            now.getDate()
-        ).getTime();
-
-        setStartDate(last5Years);
 
     }, []);
 
     useEffect(() => {
         const now = new Date();
-
-        if (filter === "week") {
-            const lastWeek = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate() - 7
-            ).getTime();
-            setStartDate(lastWeek);
-        }
 
         if (filter === "month") {
             const lastMonth = new Date(
@@ -166,8 +148,6 @@ export default function Dashboard() {
     0
     )
     .toFixed(2);
-
-
 
     //  Calculate budgets
     const budgetSum = budgetData
@@ -270,9 +250,9 @@ export default function Dashboard() {
                                     All
                                 </MenuItem>
                                 
-                                <MenuItem value={"week"} sx={{ fontSize: "14px" }}>
+                                {/* <MenuItem value={"week"} sx={{ fontSize: "14px" }}>
                                     Last Week
-                                </MenuItem>
+                                </MenuItem> */}
                                 
                                 <MenuItem value={"month"} sx={{ fontSize: "14px" }}>
                                     Last Month
