@@ -156,8 +156,13 @@ export default function Dashboard() {
         accumulator + Number(currentValue.limit_amount),0)
     .toFixed(2);
 
-    //  Expected to sav
-    const savings = incomeSum - budgetSum - expensesSum;
+    //  Expected savings
+    const toDebit = budgetSum
+    if (expensesSum > budgetSum) {
+        toDebit = expensesSum
+    }
+
+    const savings = incomeSum - toDebit;
 
     //  Calculate remaining balance
     let expensesSumBudgets = 0;
