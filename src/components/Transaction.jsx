@@ -16,11 +16,6 @@ import ManualEntry from '@mui/icons-material/EditNoteOutlined';
 import Trash from '@mui/icons-material/DeleteOutlineOutlined';
 import DialogDeleteTransaction from "./DialogDeleteTransaction";
 
-// import ScanReceipt from "./svg/IconScanReciept";
-// import LinkAccount from "./svg/IconPayWithCard";
-// import ManualEntry from "./svg/IconManuallyEnter";
-// import { ReactComponent as Trash } from "./svgCategories/trash-icon.svg";
-
   const actions = [
     { icon: <LinkAccount />, name: "Link", route: "/link" },
     { icon: <ManualEntry />, name: "Expense", route: "/addexpense" },
@@ -33,7 +28,7 @@ import DialogDeleteTransaction from "./DialogDeleteTransaction";
 export default function Transactions() {
     //state
     const [transaction, setTransaction] = useState("expenses");
-    const [filter, setFilter] = useState("month");
+    const [filter, setFilter] = useState("");
     const [category_name, setCategory] = useState("");
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
@@ -82,21 +77,14 @@ export default function Transactions() {
 
     //useEffect for Date Filtering
     useEffect(() => {
-      console.log("INSIDE 1st useEffect", {startDate, filter})
+
       // set the end date filter
-      const now = new Date();
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
       setEndDate(tomorrow.getTime());
 
       // set start date of the filter
-      const last5Years = new Date(
-        now.getFullYear() - 5,
-        now.getMonth(),
-        now.getDate()
-      ).getTime();
-
       setFilter("month")
     }, []);
 
@@ -166,8 +154,8 @@ export default function Transactions() {
       setFilteredTran(filteredData)
       setStartDate(updatedStartDate);
 
+    }, [filter]);
 
-    }, [filter, tranData]);
 
     return (
       <Container

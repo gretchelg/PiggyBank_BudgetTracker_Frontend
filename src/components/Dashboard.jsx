@@ -30,8 +30,8 @@ import { ReactComponent as IconWork } from "./svgCategories/work.svg";
 export default function Dashboard() {
     const [filter, setFilter] = useState("month");
     const [filteredData, setFilteredData] = useState([]);
-    const [startDate, setStartDate] = useState(Date);
-    const [endDate, setEndDate] = useState(Date);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     const [spentBar, setSpentBar] = useState(0);
     const [budgetBar, setBudgetBar] = useState(0);
     const { token } = useContext(AuthContext);
@@ -39,12 +39,9 @@ export default function Dashboard() {
 
     const {
         categories,
-        setCategories,
         categoriesObj,
         budgetData,
-        setBudgetData,
         tranData,
-        setTranData,
     } = useContext(DataContext);
 
     const { styling } = useContext(ThemeContext);
@@ -62,14 +59,11 @@ export default function Dashboard() {
     // filter data by date
     useEffect(() => {
         const now = new Date();
-
-        const today = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate()
-        ).getTime();
-    
-        setEndDate(today);
+        const today = new Date()
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        // setEndDate(tomorrow.getTime());
+        setEndDate(tomorrow);
 
         const last5Years = new Date(
             now.getFullYear() - 5,
@@ -174,21 +168,18 @@ export default function Dashboard() {
     .toFixed(2);
 
 
-//==============================================================
-//  Calculate budgets
-//===============================================================
 
+    //  Calculate budgets
     const budgetSum = budgetData
     ?.reduce(
     (accumulator, currentValue) =>
         accumulator + Number(currentValue.limit_amount),0)
     .toFixed(2);
 
-//  Expected to save
-
+    //  Expected to sav
     const savings = incomeSum - budgetSum - expensesSum;
 
-//  Calculate remaining balance
+    //  Calculate remaining balance
     let expensesSumBudgets = 0;
     let remainingBudget = 0
 
@@ -198,7 +189,7 @@ export default function Dashboard() {
 
     remainingBudget = budgetSum - expensesSumBudgets
 
-//  Graph Bar
+    //  Graph Bar
     useEffect(() => {
         if (expensesSum !== 0) {
             setSpentBar((expensesSum * 100) / incomeSum);
@@ -212,10 +203,8 @@ export default function Dashboard() {
     }, [expensesSumBudgets]);
 
 
-// =========================================================================
-//  FILTER BY CATEGORY
-// ========================================================================
 
+    //  select category icon
     const categoryIcons = {
         bills: IconBills,
         communication: IconCommunication,
@@ -233,7 +222,6 @@ export default function Dashboard() {
         others: IconOthers,
     };
 
-
     return (
         <Container
         sx={{
@@ -248,12 +236,11 @@ export default function Dashboard() {
         >
             <Grid container className="dash-container">
 
-{/* ===============================================
-    FILTER BY DATE DROPDOWN
-    ============================================= */}
+                {/* FILTER BY DATE DROPDOWN */}
                 <Grid item xs={12}>
                     <Box component="div" className="transaction-filter">
                         <FormControl fullWidth>
+                            {/* Filter dashboard info by date */}
                             <InputLabel
                                 sx={{ fontSize: " 20px" }}
                                 id="demo-simple-select-label"
@@ -308,9 +295,7 @@ export default function Dashboard() {
                     </Box>
                 </Grid>
 
-{/* =========================================
-    BALANCE OVERVIEW
-    ====================================== */}
+                {/* BALANCE OVERVIEW */}
                 <Link
                     to="/transactions"
                     className="dash-progress"
@@ -319,9 +304,9 @@ export default function Dashboard() {
                         backgroundColor: styling.backgroundBoard,
                     }}
                 >
-{/* =========================================
-    CURRENT BALANCE
-    ====================================== */}
+
+                    {/* CURRENT BALANCE */}
+ 
                     <p style={{ color: styling.txtColor }} className="current-balance">
                         Current Balance
                     </p>
@@ -330,9 +315,9 @@ export default function Dashboard() {
                         {" "}
                         {(incomeSum - expensesSum).toFixed(2)} €
                     </h2>
-{/* =========================================
-    EXPECTED SAVINGS
-    ====================================== */}
+
+                    {/* EXPECTED SAVINGS */}
+  
                     <p style={{ color: styling.txtColor }} className="dash-expected">
                         Expected savings: {savings.toFixed(2)} €
                     </p>
@@ -342,9 +327,8 @@ export default function Dashboard() {
                     </p>
 
                     <Box className="linear-progress-container1">
-{/* =========================================
-    TOTAL SPENT - LEFT PROGRESS BAR
-    ====================================== */}
+
+                        {/* TOTAL SPENT - LEFT PROGRESS BAR */}
                         <Typography
                             style={spentBar > 10 ? { color: "white" } : { color: "black" }}
                             className="progress-left"
@@ -352,9 +336,9 @@ export default function Dashboard() {
                         >
                             {expensesSum} €
                         </Typography>
-{/* =========================================
-    TOTAL INCOME - RIGHT PROGRESS BAR
-    ====================================== */}
+
+                        {/* TOTAL INCOME - RIGHT PROGRESS BAR */}
+
                         <Typography
                             style={spentBar > 90 ? { color: "white" } : { color: "black" }}
                             className="progress-right"
@@ -369,9 +353,9 @@ export default function Dashboard() {
                         />
 
                     </Box>
-{/* =========================================
-    REMAINING BUDGET - LEFT PROGRESS BAR
-    ====================================== */}
+
+                    {/* REMAINING BUDGET - LEFT PROGRESS BAR */}
+
                     <p style={{ color: styling.txtColor }} className="spent-title">
                         Remaining Budget
                     </p>
@@ -384,9 +368,9 @@ export default function Dashboard() {
                         >
                             {remainingBudget.toFixed(2)} €
                         </Typography>
-{/* ==============================================
-    TOTAL BUDGET ALLOCATION - RIGHT PROGRESS BAR
-    ============================================== */}
+
+                        {/* TOTAL BUDGET ALLOCATION - RIGHT PROGRESS BAR */}
+
                         <Typography
                             style={budgetBar > 90 ? { color: "white" } : { color: "black" }}
                             className="progress-right"
@@ -404,14 +388,14 @@ export default function Dashboard() {
 
                 </Link>
 
-{/* ===================================
-    CHART REPRESENTATION OF SPENDINGS
-====================================== */}
+
+                {/* CHART REPRESENTATION OF TOP SPENDINGS */}
+
                 <Charts />
 
-{/* ===================================
-    BUDGET ALLOCATION OVERVIEW
-====================================== */}
+
+                {/* CONSUMED BUDGET MONITORING OVERVIEW */}
+
                 <Grid
                     item
                     xs={12}
@@ -427,13 +411,14 @@ export default function Dashboard() {
                             
                                 const categoryObjField = categoriesObj[each.category_name]
                                 let remainingBudgetBar = 0;
-{/* ========================================
-    CALCULATE REMAINING BUDGET PER CATEGORY
-============================================ */}                               
+
+                                // CALCULATE REMAINING BUDGET PER CATEGORY
+
                                 if (categoryObjField) {
                                     const {limit, spent} = categoryObjField
                                     remainingBudgetBar = ((limit - spent) / limit) * 100;
                                 }
+
                             return (
                                 <Box
                                     style={{
@@ -442,12 +427,11 @@ export default function Dashboard() {
                                     }}
                                     className="swiper-slide"
                                 >
-{/* ========================================
-    DISPLAY CORRESPONDING CATEGORY ICON
-============================================ */}  
+
                                     <Box className="dash-budget">
                                         {
                                         (() => {
+                                            // SELECT CORRESPONDING CATEGORY ICON
                                             var selection = each.category_name ? each.category_name : "others"
                                             const Icon = categoryIcons[selection]
                                             return <Icon className="dash-icon-title" />;
@@ -470,7 +454,7 @@ export default function Dashboard() {
                                                 className="dash-budget-info"
                                             >
                                                 {categoriesObj?.hasOwnProperty(each.category_name)
-                                                ? `${categoriesObj[each.category_name].spent}  € spent`
+                                                ? `${categoriesObj[each.category_name].spent.toFixed(2)}  € spent`
                                                 : "0  € spent"}
                                             </Typography>
                                         </Box>
@@ -483,8 +467,8 @@ export default function Dashboard() {
                                     <Box className="linear-progress-container2">
                                         <Typography
                                             style={
-                                            (categoriesObj[each.category_name]?.spent * 100) /
-                                            categoriesObj[each.category_name]?.limit > 10
+
+                                            remainingBudgetBar > 8
                                                 ? { color: "white" }
                                                 : { color: "black" }
                                             }
@@ -501,8 +485,7 @@ export default function Dashboard() {
 
                                         <Typography
                                             style={
-                                            (categoriesObj[each.category_name]?.spent * 100) /
-                                                categoriesObj[each.category_name]?.limit > 90
+                                            remainingBudgetBar > 90
                                                 ? { color: "white" }
                                                 : { color: "black" }
                                             }
