@@ -8,13 +8,10 @@ import { SpeedDial, SpeedDialAction} from "@mui/material";
 import { Backdrop, Container, Box, LinearProgress } from "@mui/material";
 import { Button, Card, CardContent, Typography} from "@mui/material";
 import { Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
-// import ManualEntry from "./svg/IconManuallyEnter";
 
 import ManualEntry from "@mui/icons-material/EditNoteOutlined";
 import AddIcon from "@mui/icons-material/Add";
-import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { styled } from "@mui/material/styles";
 
 import { ReactComponent as IconBills } from "./svgCategories/bills.svg";
 import { ReactComponent as IconCommunication } from "./svgCategories/communication.svg";
@@ -31,28 +28,13 @@ import { ReactComponent as IconRepairs } from "./svgCategories/repairs.svg";
 import { ReactComponent as IconTransportation } from "./svgCategories/transportation.svg";
 import { ReactComponent as IconWork } from "./svgCategories/work.svg";
 import { ReactComponent as IconTrash } from "./svgCategories/trash.svg";
-
-    const ExpandMore = styled((props) => {
-        const { expand, ...other } = props;
-            return <IconButton {...other} />;
-        })(({ theme, expand }) => ({
-        
-            transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-            marginLeft: "auto",
-            transition: theme.transitions.create("transform", {
-            duration: theme.transitions.duration.shortest,
-        }),
-    }));
     
 export default function Budget() {
     const [expanded, setExpanded] = useState(false);
-    const [expandedCat, setExpandedCat] = useState("");
     const {
     categoriesObj,
     budgetData,
-    setBudgetData,
     tranData,
-    setTranData,
     refresh,
     setRefresh,
     } = useContext(DataContext);
@@ -95,24 +77,24 @@ export default function Budget() {
         eatingout: IconEatingOut,
     };
 
-    let USDollar = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    });
-
     let euro = Intl.NumberFormat("en-DE", {
         style: "currency",
         currency: "EUR",
     });
 
-    let pounds = Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: "GBP",
-    });
 
     const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
     };
+
+    // Calculate remaining budget for each category
+    const calcRemainingBudget = el => {
+        const remainingBudget = categoriesObj[el.category_name] ? (Number(el.limit_amount) -
+            categoriesObj[el.category_name].spent).toFixed(2)
+            : (Number(el.limit_amount)).toFixed(2)
+
+        return remainingBudget
+    }
 
     return (
     <Container
@@ -124,6 +106,7 @@ export default function Budget() {
         paddingBottom: styling.paddingBottom,
         }}
     >
+        {/* Pop-up window to confirm delete */}
         {dialogOpen ? (
         <DialogConfirm
             setDialogOpen={setDialogOpen}
@@ -143,7 +126,8 @@ export default function Budget() {
         }}
         >
         {budgetData.length ? null : "You have not added a Budget Limit yet."}
-
+        
+        {/* Show total spent per budget category limit */}
         {budgetData?.map((element) => {
             let spentBudgetBar = 0;
             
@@ -215,11 +199,8 @@ export default function Budget() {
                         color="text.secondary"
                         gutterBottom
                         >
-                        {/* Budget {element.limit_amount}€/Month */}
-                        {categoriesObj[element.category_name]
-                            ? (Number(element.limit_amount) -
-                            categoriesObj[element.category_name].spent).toFixed(2)
-                            : (Number(element.limit_amount)).toFixed(2)}{" "}
+                        {/* Show remaining budget */}
+                        {calcRemainingBudget(element)}{" "}
                         € remaining budget
                         </Typography>
                     </Box>
@@ -232,6 +213,7 @@ export default function Budget() {
                         width: "20%",
                         }}
                     >
+                        {/* Delete budget button  */}
                         <Button
                         style={{ color: styling.txtColor }}
                         sx={{ p: 1 }}
@@ -252,6 +234,7 @@ export default function Budget() {
                     </Box>
                     </Box>
                     <div className="linear-progress-container1">
+                    {/* Show the running spent amount in progress bar */}
                     <h6
                         className="progress-left"
                         style={
@@ -263,9 +246,10 @@ export default function Budget() {
                         }
                     >
                         {categoriesObj?.hasOwnProperty(element.category_name)
-                        ? `${categoriesObj[element.category_name].spent} € spent`
+                        ? `${categoriesObj[element.category_name].spent.toFixed(2)} € spent`
                         : "0 € spent"}
                     </h6>
+                    {/* Show the set limit amount in progress bar */}
                     <span
                         className="progress-right"
                         style={
@@ -278,12 +262,15 @@ export default function Budget() {
                     >
                         {element.limit_amount} €
                     </span>
+
+                    {/* Determine spent over budget limit in progress bar */}
                     <LinearProgress
                         variant="determinate"
                         // value={categoriesObj[element.category_name] ? 90 : 20}
                         value={spentBudgetBar}
                     />
                     </div>
+
                     <Accordion
                     expanded={expanded === element.category_name}
                     onChange={handleChange(element.category_name)}
@@ -295,6 +282,7 @@ export default function Budget() {
                         id="panel1bh-header"
                     ></AccordionSummary>
                     <AccordionDetails>
+                        {/* Show detailed spent transaction per category */}
                         {tranData
                         .filter(
                             (item) =>
@@ -362,6 +350,8 @@ export default function Budget() {
             );
         })}
         <Backdrop open={open} />
+
+        {/* Speed dial button to add budget plan */}
         <SpeedDial
             ariaLabel="SpeedDial tooltip example"
             style={{
