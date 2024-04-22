@@ -39,7 +39,7 @@ export default function Transactions() {
     //navigate
     const navigate = useNavigate();
     //context
-    const { tranData, refresh, setRefresh } = useContext(DataContext);
+    const { tranData, setTranData, refresh, setRefresh } = useContext(DataContext);
     const { token } = useContext(AuthContext);
     const { styling } = useContext(ThemeContext);
 
@@ -153,7 +153,7 @@ export default function Transactions() {
       setFilteredTran(filteredData)
       setStartDate(updatedStartDate);
 
-    }, [filter]);
+    }, [filter, tranData]);
 
 
     return (
