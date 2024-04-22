@@ -33,7 +33,7 @@ import DialogDeleteTransaction from "./DialogDeleteTransaction";
 export default function Transactions() {
     //state
     const [transaction, setTransaction] = useState("expenses");
-    const [filter, setFilter] = useState("");
+    const [filter, setFilter] = useState("month");
     const [category_name, setCategory] = useState("");
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
@@ -41,6 +41,7 @@ export default function Transactions() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [tranDeleteName, setTranDeleteName] = useState("false");
     const [tranDeleteId, setTranDeleteId] = useState(null);
+    const [filteredTran, setFilteredTran] = useState([]);
     //navigate
     const navigate = useNavigate();
     //context
@@ -66,42 +67,6 @@ export default function Transactions() {
       setTransaction(newValue);
     };
 
-    const handleCategoryChange = (event) => {
-      setCategory(event.target.value);
-    };
-
-    // delete transactions
-
-    const handleDeleteTransaction = async (id) => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/transaction/${id}`,
-          `https://piggybank-api-jwhz.onrender.com/transaction/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-          if (response.ok) {
-            // Transaction successfully deleted
-            const deletedTransaction = await response.json();
-            console.log(deletedTransaction);
-            // Perform any necessary actions after deletion
-          } else {
-            // Transaction not found or other error occurred
-            const errorData = await response.json();
-            console.error(errorData.error);
-          }
-      } catch (error) {
-        console.error("An error occurred while deleting the transaction:", error);
-      }
-      setRefresh(!refresh);
-    };
-
     const paperStyles = {
       // Customize the background color here
       background: "linear-gradient(#c80048, #961c48)",
@@ -109,45 +74,43 @@ export default function Transactions() {
     };
 
     //Currency Format
-    let USDollar = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+  
     let euro = Intl.NumberFormat("en-DE", {
       style: "currency",
       currency: "EUR",
     });
-    let pounds = Intl.NumberFormat("en-GB", {
-      style: "currency",
-      currency: "GBP",
-    });
 
     //useEffect for Date Filtering
     useEffect(() => {
+      console.log("INSIDE 1st useEffect", {startDate, filter})
+      // set the end date filter
       const now = new Date();
-      const today = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      ).getTime();
-      setEndDate(today);
+      const today = new Date()
+      const tomorrow = new Date(today)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      setEndDate(tomorrow.getTime());
+
+      // set start date of the filter
       const last5Years = new Date(
         now.getFullYear() - 5,
         now.getMonth(),
         now.getDate()
       ).getTime();
-      setStartDate(last5Years);
+
+      setFilter("month")
     }, []);
 
     useEffect(() => {
       const now = new Date();
+      var updatedStartDate = startDate
+
       if (filter === "week") {
         const lastWeek = new Date(
           now.getFullYear(),
           now.getMonth(),
           now.getDate() - 7
         ).getTime();
-        setStartDate(lastWeek);
+        updatedStartDate = lastWeek
       }
       if (filter === "month") {
         const lastMonth = new Date(
@@ -155,7 +118,7 @@ export default function Transactions() {
           now.getMonth() - 1,
           now.getDate()
         ).getTime();
-        setStartDate(lastMonth);
+        updatedStartDate = lastMonth
       }
       if (filter === "3months") {
         const last3Months = new Date(
@@ -163,7 +126,7 @@ export default function Transactions() {
           now.getMonth() - 3,
           now.getDate()
         ).getTime();
-        setStartDate(last3Months);
+        updatedStartDate = last3Months
       }
       if (filter === "6months") {
         const last6Months = new Date(
@@ -171,7 +134,7 @@ export default function Transactions() {
           now.getMonth() - 6,
           now.getDate()
         ).getTime();
-        setStartDate(last6Months);
+        updatedStartDate = last6Months
       }
       if (filter === "year") {
         const lastYear = new Date(
@@ -179,7 +142,7 @@ export default function Transactions() {
           now.getMonth(),
           now.getDate()
         ).getTime();
-        setStartDate(lastYear);
+        updatedStartDate = lastYear
       }
       if (filter === "all") {
         const last5Years = new Date(
@@ -187,10 +150,24 @@ export default function Transactions() {
           now.getMonth(),
           now.getDate()
         ).getTime();
-        setStartDate(last5Years);
+        updatedStartDate = last5Years
       }
-    }, [filter]);
 
+      const filteredData = tranData.filter((el) => {
+        const tran_date_timestamp = new Date(el.tran_date)
+        const end = new Date(endDate)
+        const start = new Date(updatedStartDate)
+  
+        const result = tran_date_timestamp <= end &&
+        tran_date_timestamp >= start
+  
+        return result
+      })
+      setFilteredTran(filteredData)
+      setStartDate(updatedStartDate);
+
+
+    }, [filter, tranData]);
 
     return (
       <Container
@@ -327,16 +304,7 @@ export default function Transactions() {
               </Typography>
             </Box>
 
-            {tranData
-              .filter((element) => {
-                const tran_date_timestamp = new Date(
-                  element.tran_date
-                ).getTime();
-                return (
-                  tran_date_timestamp <= endDate &&
-                  tran_date_timestamp >= startDate
-                );
-              })
+            {filteredTran
               .filter((element) => element.tran_sign === "DR")
               .sort((a, b) => new Date(b.tran_date) - new Date(a.tran_date))
               .map((element) => {
@@ -423,16 +391,7 @@ export default function Transactions() {
               </Typography>
             </Box>
 
-            {tranData
-              .filter((element) => {
-                const tran_date_timestamp = new Date(
-                  element.tran_date
-                ).getTime();
-                return (
-                  tran_date_timestamp <= endDate &&
-                  tran_date_timestamp >= startDate
-                );
-              })
+            {filteredTran
               .filter((element) => element.tran_sign === "CR")
               .sort((a, b) => new Date(b.tran_date) - new Date(a.tran_date))
               .map((element) => {
@@ -480,12 +439,18 @@ export default function Transactions() {
                     >
                       {newLocalDate}
                     </Typography>
+                    
                     <Button
                       sx={{ p: 1 }}
-                      onClick={() => handleDeleteTransaction(element._id)}
+                      onClick={() => {
+                        setDialogOpen(true);
+                        setTranDeleteName(element.tran_description);
+                        setTranDeleteId(element._id);
+                      }}
                     >
                       <Trash style={{ width: "20px", height: "20px" }} />
                     </Button>
+
                   </Box>
                 );
               })}
